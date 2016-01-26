@@ -1,10 +1,7 @@
 module BoardModel
   ( Board
-  , Marker, Player
-  , index, row, col
-  , get, set
+  , move
   , defaultBoard
-  , xPlayer, oPlayer
   ) where
 
 
@@ -12,21 +9,12 @@ import Array exposing (Array)
 import Maybe exposing (..)
 
 
-type alias Board
-  = Array Row
+type alias Board a
+  = Array (Row a)
 
 
-type alias Row
-  = Array (Marker)
-
-
-type alias Marker
-  = Maybe Player
-
-
-type Player
-  = X
-  | O
+type alias Row a
+  = Array a
 
 
 type alias Index
@@ -37,20 +25,18 @@ defaultSize : Int
 defaultSize = 3
 
 
-initBoard : Int -> Marker -> Board
+initBoard : Int -> a -> Board a
 initBoard size marker =
   Array.repeat size (Array.repeat size marker)
 
-
-emptyBoard : Int -> Board
+emptyBoard : Int -> Board (Maybe a)
 emptyBoard size =
   Array.repeat size (Array.repeat size Nothing)
 
 
-defaultBoard : Board
+defaultBoard : Board (Maybe a)
 defaultBoard =
   emptyBoard defaultSize
-
 
 
 index : Int -> Int -> Index
@@ -69,13 +55,13 @@ col index =
 
 
 -- Get an element of the board, returning Nothing if out of bounds.
-get : Index -> Board -> Maybe Marker
+get : Index -> Board a -> Maybe a
 get index board =
   Array.get (row index) board `andThen` Array.get (col index)
 
 
 -- Set an element of the board, returning the unchanged board if out of bounds.
-set : Index -> Marker -> Board -> Board
+set : Index -> a -> Board a -> Board a
 set index marker board =
   Array.get (row index) board
   |> Maybe.map (\oldRow -> Array.set (col index) marker oldRow)
@@ -83,5 +69,7 @@ set index marker board =
   |> Maybe.withDefault board
 
 
-xPlayer = X
-oPlayer = O
+move : Index -> a -> Board (Maybe a) -> Board (Maybe a)
+move index player board =
+  set index (Just player) board
+

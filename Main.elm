@@ -5,9 +5,14 @@ import Graphics.Element exposing (Element, show)
 import BoardModel exposing (..)
 
 
+type Player
+  = X
+  | O
+
+
 main : Signal Element
 main =
   defaultBoard
-  |> set (1,1) (Just xPlayer)
+  |> move (1,1) X
   |> show
   |> Signal.constant
