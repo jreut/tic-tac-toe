@@ -14,7 +14,7 @@ type alias Board a
 
 
 type alias Row a
-  = Array a
+  = Array (Maybe a)
 
 
 type alias Index
@@ -27,14 +27,14 @@ defaultSize = 3
 
 initBoard : Int -> a -> Board a
 initBoard size marker =
-  Array.repeat size (Array.repeat size marker)
+  Array.repeat size (Array.repeat size (Just marker))
 
-emptyBoard : Int -> Board (Maybe a)
+emptyBoard : Int -> Board a
 emptyBoard size =
   Array.repeat size (Array.repeat size Nothing)
 
 
-defaultBoard : Board (Maybe a)
+defaultBoard : Board a
 defaultBoard =
   emptyBoard defaultSize
 
@@ -58,18 +58,22 @@ col index =
 get : Index -> Board a -> Maybe a
 get index board =
   Array.get (row index) board `andThen` Array.get (col index)
+    |> Maybe.withDefault Nothing
 
 
 -- Set an element of the board, returning the unchanged board if out of bounds.
 set : Index -> a -> Board a -> Board a
 set index marker board =
-  Array.get (row index) board
-  |> Maybe.map (\oldRow -> Array.set (col index) marker oldRow)
-  |> Maybe.map (\newRow -> Array.set (row index) newRow board)
-  |> Maybe.withDefault board
+  let
+      oldRow = Array.get (row index) board
+      newRow = Maybe.map (\r -> Array.set (col index) (Just marker) r) oldRow
+      newBoard = Maybe.map (\r -> Array.set (row index) r board) newRow
+  in 
+      Maybe.withDefault board newBoard
 
 
-move : Index -> a -> Board (Maybe a) -> Board (Maybe a)
+move : Index -> a -> Board a -> Board a
 move index player board =
-  set index (Just player) board
-
+  let
+      occupant = get index board
+  in set index (Maybe.withDefault player occupant) board
