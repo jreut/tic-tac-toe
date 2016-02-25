@@ -1,5 +1,6 @@
 module BoardModel
   ( Board
+  , Index
   , move
   , defaultBoard
   ) where
