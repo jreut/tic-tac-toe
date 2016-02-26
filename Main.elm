@@ -1,32 +1,27 @@
 module TicTacToe where
 
-import StartApp.Simple exposing (start)
-import Html exposing (Html
+import StartApp.Simple exposing
+  ( start
+  )
+import Html exposing
+  ( Html
   , Attribute
   , text
   , span
   , div
   , fromElement
   )
-import Html.Attributes exposing (
-  style
+import Html.Attributes exposing
+  ( style
   )
-import Html.Events exposing (
-  onClick
+import Html.Events exposing
+  ( onClick
   )
-import Array exposing (
-  Array
-  )
-import Graphics.Element exposing (
-  Element
-  , show
-  , flow
-  , down
-  , right
-  , container
-  , middle
+import Array exposing
+  ( Array
   )
 import BoardModel exposing (..)
+
 
 type alias Model =
   { board: Board Player
@@ -44,6 +39,7 @@ type Action
   | Move Index
 
 
+main : Signal Html
 main =
   start
     { model = init
@@ -77,7 +73,7 @@ nextPlayer player =
 
 
 view : Signal.Address Action -> Model -> Html
-view address  model =
+view address model =
   render address model.board
 
 
