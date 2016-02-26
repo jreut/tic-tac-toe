@@ -85,23 +85,23 @@ render : Signal.Address Action -> Board Player -> Html
 render address board =
   board
   |> Array.toList
-  |> List.map (renderRow address)
+  |> List.indexedMap (\row -> renderRow row address)
   |> div [ boardStyle ]
 
 
-renderRow : Signal.Address Action -> Array (Maybe Player) -> Html
-renderRow address row =
+renderRow : Int -> Signal.Address Action -> Array (Maybe Player) -> Html
+renderRow rowPos address row =
   row
   |> Array.toList
-  |> List.map (renderCell address)
+  |> List.indexedMap (\col -> renderCell rowPos col address)
   |> div [ rowStyle ]
 
 
-renderCell : Signal.Address Action -> Maybe Player -> Html
-renderCell address player =
+renderCell : Int -> Int ->  Signal.Address Action -> Maybe Player -> Html
+renderCell row col address player =
   div
     [ cellStyle
-    , onClick address (Move (0,0))
+    , onClick address (Move (row, col))
     ] [ text (toString player) ]
 
 
