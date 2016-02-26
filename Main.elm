@@ -100,9 +100,15 @@ renderRow rowPos address row =
 renderCell : Int -> Int ->  Signal.Address Action -> Maybe Player -> Html
 renderCell row col address player =
   div
-    [ cellStyle
-    , onClick address (Move (row, col))
-    ] [ text (toString player) ]
+    [ cellStyle , onClick address (Move (row, col)) ]
+    [ text (renderPlayer player) ]
+
+
+renderPlayer : Maybe Player -> String
+renderPlayer player =
+  player
+  |> Maybe.map toString
+  |> Maybe.withDefault ""
 
 
 boardStyle : Attribute
