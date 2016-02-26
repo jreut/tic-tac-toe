@@ -120,8 +120,8 @@ rowStyle : Attribute
 rowStyle =
   style
     [ ("display", "flex")
+    , ("margin", "1em")
     , ("flex-direction", "row")
-    , ("border", "red 1px dotted")
     , ("flex-basis", "4em")
     , ("align-items", "center")
     , ("justify-content", "center")
@@ -132,6 +132,8 @@ cellStyle : Attribute
 cellStyle =
   style
     [ ("border", "black 1px solid")
+    , ("border-radius", "10%")
+    , ("margin", "1em")
     , ("display", "flex")
     , ("padding", "1em")
     , ("flex-basis", "4em")
